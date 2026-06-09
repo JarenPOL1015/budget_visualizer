@@ -1,69 +1,74 @@
 # budget_visualizer.py
 from graphics import Canvas
+from translations import TEXTS 
 
-# --- CONSTANTES DE CONFIGURACIÓN ---
+# --- CONSTANTES DE CONFIGURACIÓN GRÁFICA ---
 CANVAS_WIDTH = 650
 CANVAS_HEIGHT = 450
-ALERT_THRESHOLD = 0.30  # Límite de alerta (30%)
+ALERT_THRESHOLD = 0.30  
 
-# Constantes de diseño del gráfico
 BAR_WIDTH = 80           
 BOTTOM_Y = CANVAS_HEIGHT - 60  
 MAX_BAR_HEIGHT = 300     
 
 def main():
-    """ Orquesta la lógica del programa con manejo de errores y validación. """
-    print("=== BIENVENIDO A TU OPTIMIZADOR DE PRESUPUESTO ===")
+    """ Orquesta la lógica permitiendo elegir el idioma al inicio. """
+    lang = choose_language()
     
-    # 1. Entrada de datos validada por consola
-    total_income = get_total_income()
-    expenses = get_expenses()
+    print("\n" + TEXTS[lang]['welcome'])
     
-    # 2. Procesamiento matemático
+    total_income = get_total_income(lang)
+    expenses = get_expenses(lang)
     percentages = calculate_percentages(total_income, expenses)
     
-    # 3. Inicialización del Canvas Local
     canvas = Canvas(CANVAS_WIDTH, CANVAS_HEIGHT)
+    draw_budget_chart(canvas, percentages, lang)
     
-    # 4. Renderizado del gráfico completo
-    draw_budget_chart(canvas, percentages)
-    
-    # 5. Mantener ventana activa
-    print("\n[Éxito] Gráfico generado de forma segura.")
-    print("Cierra la ventana gráfica para terminar la ejecución.")
+    print(TEXTS[lang]['success'])
+    print(TEXTS[lang]['close_window'])
     canvas.mainloop()
 
-def get_positive_float(prompt):
-    """
-    Función modular que solicita un número flotante, atrapa errores de texto
-    y asegura que el valor sea estrictamente mayor a cero.
-    """
+def choose_language():
+    """Pregunta al usuario el idioma de interfaz antes de arrancar."""
+    while True:
+        print("Select Language / Selecciona el Idioma:")
+        print("1. Español")
+        print("2. English")
+        choice = input("Choice / Opción (1/2): ").strip()
+        if choice == '1':
+            return 'es'
+        elif choice == '2':
+            return 'en'
+        print("Opción inválida / Invalid option.\n")
+
+def get_positive_float(prompt, lang):
+    """Solicita un número flotante y muestra errores en el idioma elegido."""
     while True:
         try:
             value = float(input(prompt))
             if value > 0:
                 return value
-            print("Error: El valor debe ser un número positivo mayor a cero. Intenta de nuevo.")
+            print(TEXTS[lang]['input_error'])
         except ValueError:
-            print("Error: Entrada inválida. Por favor, introduce solo números enteros o decimales.")
+            print(TEXTS[lang]['type_error'])
 
-def get_total_income():
-    """Solicita el ingreso mensual total usando la función de validación."""
-    return get_positive_float("Ingresa tu ingreso mensual total disponible ($): ")
+def get_total_income(lang):
+    """Solicita el ingreso total usando los textos del idioma activo."""
+    return get_positive_float(TEXTS[lang]['income_prompt'], lang)
 
-def get_expenses():
-    """Solicita los gastos usando la función de validación para reutilizar código."""
-    print("\nIntroduce tus gastos mensuales por categoría:")
+def get_expenses(lang):
+    """Genera el diccionario mapeando directamente los nombres traducidos."""
+    print(TEXTS[lang]['expense_intro'])
     expenses = {
-        'Vivienda': get_positive_float("- Vivienda (Alquiler/Servicios): $"),
-        'Comida': get_positive_float("- Comida (Super/Restaurantes): $"),
-        'Transporte': get_positive_float("- Transporte (Gasolina/Pasajes): $"),
-        'Entretenimiento': get_positive_float("- Entretenimiento (Salidas/Streaming): $")
+        TEXTS[lang]['vivienda']: get_positive_float(TEXTS[lang]['vivienda_prompt'], lang),
+        TEXTS[lang]['comida']: get_positive_float(TEXTS[lang]['comida_prompt'], lang),
+        TEXTS[lang]['transporte']: get_positive_float(TEXTS[lang]['transporte_prompt'], lang),
+        TEXTS[lang]['entretenimiento']: get_positive_float(TEXTS[lang]['entretenimiento_prompt'], lang)
     }
     return expenses
 
 def calculate_percentages(income, expenses):
-    """Calcula la proporción de cada gasto frente al ingreso total."""
+    """Calcula las proporciones de los gastos."""
     percentages = {}
     for category in expenses:
         percentages[category] = expenses[category] / income
@@ -71,9 +76,9 @@ def calculate_percentages(income, expenses):
 
 # --- CAPA DE RENDERIZADO GRÁFICO ---
 
-def draw_budget_chart(canvas, percentages):
-    """Coordina el dibujo de todos los componentes visuales."""
-    draw_threshold_line(canvas)
+def draw_budget_chart(canvas, percentages, lang):
+    """Dibuja el gráfico y adapta las etiquetas dinámicamente."""
+    draw_threshold_line(canvas, lang)
     
     slot_width = CANVAS_WIDTH / len(percentages)
     index = 0
@@ -81,17 +86,12 @@ def draw_budget_chart(canvas, percentages):
     for category in percentages:
         percentage = percentages[category]
         
-        # Calcular coordenadas X
         slot_left_x = index * slot_width
         margin = (slot_width - BAR_WIDTH) / 2
         left_x = slot_left_x + margin
         right_x = left_x + BAR_WIDTH
+        top_y = BOTTOM_Y - (percentage * MAX_BAR_HEIGHT)
         
-        # Calcular coordenadas Y
-        bar_height = percentage * MAX_BAR_HEIGHT
-        top_y = BOTTOM_Y - bar_height
-        
-        # Definición de alertas por color (Verde vs Rojo)
         color = '#2ecc71'  
         if percentage >= ALERT_THRESHOLD:
             color = '#e74c3c'  
@@ -101,11 +101,13 @@ def draw_budget_chart(canvas, percentages):
         
         index += 1
 
-def draw_threshold_line(canvas):
-    """Dibuja la línea guía horizontal del 30%."""
+def draw_threshold_line(canvas, lang):
+    """Dibuja la línea del 30% con el texto en el idioma correcto."""
     threshold_y = BOTTOM_Y - (ALERT_THRESHOLD * MAX_BAR_HEIGHT)
     canvas.create_line(0, threshold_y, CANVAS_WIDTH, threshold_y, color='#95a5a6')
-    canvas.create_text(110, threshold_y - 12, "LÍMITE RECOMENDADO (30%)", color='#7f8c8d')
+    
+    text_x = 110 if lang == 'es' else 125
+    canvas.create_text(text_x, threshold_y - 12, TEXTS[lang]['limit_label'], color='#7f8c8d')
 
 def draw_single_bar(canvas, left_x, top_y, right_x, color):
     """Dibuja el cuerpo rectangular de la barra."""
@@ -117,8 +119,7 @@ def draw_labels(canvas, left_x, category, percentage):
     canvas.create_text(center_x, BOTTOM_Y + 25, category, color='#2c3e50')
     
     readable_percent = f"{round(percentage * 100, 1)}%"
-    bar_height = percentage * MAX_BAR_HEIGHT
-    top_y = BOTTOM_Y - bar_height
+    top_y = BOTTOM_Y - (percentage * MAX_BAR_HEIGHT)
     canvas.create_text(center_x, top_y - 15, readable_percent, color='#34495e')
 
 if __name__ == '__main__':
