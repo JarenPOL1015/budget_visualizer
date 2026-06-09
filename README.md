@@ -4,7 +4,8 @@
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/)
 [![Framework](https://img.shields.io/badge/UI-Tkinter%20%2F%20Native-emerald.svg)]()
 [![Course Project](https://img.shields.io/badge/Stanford-Code%20in%20Place-red.svg)](https://codeinplace.stanford.edu/)
-[![Latest Release](https://img.shields.io/github/v/release/JarenPOL1015/budget_visualizer?color=orange&label=Console%20v1.0.0)](https://github.com/JarenPOL1015/budget_visualizer/releases/tag/v1.0.0)
+[![Console Release](https://img.shields.io/github/v/release/JarenPOL1015/budget_visualizer?color=orange&label=Console%20v1.0.0)](https://github.com/JarenPOL1015/budget_visualizer/releases/tag/v1.0.0)
+[![GUI Release](https://img.shields.io/badge/GUI%20Release-v2.0.0--stable-brightgreen.svg)](https://github.com/JarenPOL1015/budget_visualizer/releases)
 
 An elegant financial dashboard built entirely in Python using native components. This application transforms raw income and expense data into high-fidelity visual representations, employing color psychology and behavioral heuristics to flag high-risk financial choices. Developed as a Final Project for **Stanford University's Code in Place**.
 
@@ -15,17 +16,17 @@ An elegant financial dashboard built entirely in Python using native components.
 To make testing seamless for evaluators and users, this project features pre-compiled standalone executables (`.exe`) that require **no Python installation or terminal setups**.
 
 ### 📥 Stable Releases
-* **[Latest] Console Edition (v1.0.0 .exe):** Available now in the [Releases Section](https://github.com/JarenPOL1015/budget_visualizer/releases/)! Download `budget_visualizer.exe`, double-click, and run the program instantly via your native desktop console.
-* **[Upcoming] GUI Edition (v2.0.0 .exe):** *Coming Soon!* The full immersive Dark-Mode interface executable is currently being compiled and packaged for deployment. 
+* **[Latest] Premium GUI Edition (v2.0.0 .exe):** Available now in the [Releases Section](https://github.com/JarenPOL1015/budget_visualizer/releases)! Download `BudgetVisualizer_GUI.exe`—a single, standalone binary compiled with PyInstaller (`--onefile`). No installations or folders required. Double-click and launch the full immersive dark-mode workspace instantly.
+* **Console Edition (v1.0.0 .exe):** Available in the [Releases Section](https://github.com/JarenPOL1015/budget_visualizer/releases/tag/v1.0.0). Run the lightweight stable application instantly via your native desktop terminal wrapper.
 
 ---
 
 ## 🌟 Key Features
 
 * **Dual-Engine Architecture:** Features both a lightweight terminal setup (v1.0.0) and a premium standalone Dark Mode dashboard (v2.0.0).
-* **Fintech Dark Mode Aesthetics:** Built with custom flat buttons, responsive hover events, deep slate panels (`#0f172a`), and clear typographic structures.
-* **Decoupled Architecture (i18n):** Complete localized string mapping isolated inside an independent `translations.py` file. The interface shifts dynamically between **English** and **Español**.
-* **Robust Input Layer & Validations:** Safe float conversions protected by internal error-handling frameworks. Empty fields gracefully default to zero, preventing software crashes.
+* **Fintech Dark Mode Aesthetics:** Built with custom flat buttons, responsive hover events, deep slate panels (`#0f172a`), and clear typographic structures—completely hiding the background terminal.
+* **Decoupled Architecture (i18n):** Complete localized string mapping isolated inside an independent `translations.py` file. The interface shifts dynamically between **English** and **Español** during the onboarding screen.
+* **Robust Input Layer & Validations:** Safe float conversions protected by internal error-handling frameworks. Empty fields gracefully default to zero, preventing software crashes, and syntax errors trigger native GUI alert dialogs.
 * **Proportional Scaling with Chart Grids:** Custom canvas with structural reference gridlines ($10\%$ to $100\%$) and automated bar shadow depth effects based on the **30% Financial Alert Rule**.
 
 ---
