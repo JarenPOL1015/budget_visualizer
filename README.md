@@ -31,5 +31,5 @@ The repository is structured neatly into decoupled modules:
 1. Make sure you have **Python 3** installed on your system.
 2. Clone this repository or download the source files into a local folder:
    ```bash
-   git clone [https://github.com/YOUR_USERNAME/BudgetVisualizer.git](https://github.com/JarenPOL1015/budget_visualizer.git)
+   git clone [https://github.com/JarenPOL1015/budget_visualizer.git](https://github.com/JarenPOL1015/budget_visualizer.git)
    cd BudgetVisualizer
